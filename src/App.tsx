@@ -14,6 +14,7 @@ import { Framework, frameworks } from "./lib/Frameworks";
 import { generateNextJsCommand } from "./lib/Frameworks/nextjs";
 import { renderOption } from "./components/renderOption";
 import { handleRunCommand } from "./lib/HandleRunCommand";
+import { generateNuxtCommand } from "./lib/Frameworks/nuxtjs";
 
 export interface SelectedOptions {
   [key: string]: string | boolean;
@@ -42,8 +43,18 @@ export default function App() {
   };
 
   const handleCreateProject = async () => {
-    if (selectedFramework && selectedFramework.name === "Next.js") {
-      const command = generateNextJsCommand(selectedOptions);
+    let command = "";
+    if (selectedFramework) {
+      switch (selectedFramework.name) {
+        case "Next.js": {
+          command = generateNextJsCommand(selectedOptions);
+          break;
+        }
+        case "Nuxt.js": {
+          command = generateNuxtCommand(selectedOptions);
+          break;
+        }
+      }
 
       setGeneratedCommand(command);
       setIsCreatingProject(true);
